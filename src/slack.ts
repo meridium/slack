@@ -120,6 +120,10 @@ async function send(
     `This build will be deployed to ${metaData?.octopusEnv}\n`
   }`
 
+  const successText = `${`Deployment to ${metaData?.octopusEnv} was a ${jobStatus}\n`}`
+
+  const failureText = `${`Deployment to ${metaData?.octopusEnv} was a ${jobStatus}\n <${workflowUrl}|Check error logs>`}`
+
   // add job steps, if provided
   const checks: string[] = []
   for (const [step, status] of Object.entries(jobSteps)) {
@@ -134,22 +138,62 @@ async function send(
     })
   }
 
-  const message = {
-    username: username ?? 'Github Action',
-    icon_url: iconUrl ?? 'https://octodex.github.com/images/original.png',
-    channel,
-    attachments: [
-      {
-        fallback: `[GitHub]: [${repositoryName}] ${workflow} ${eventName} ${action ? `${action} ` : ''}${jobStatus}`,
-        color: jobColor(jobStatus),
-        mrkdwn_in: ['text' as const],
-        text,
-        fields,
-        footer: `<${repositoryUrl}|${repositoryName}> #${runNumber}`,
-        footer_icon: 'https://github.githubassets.com/favicon.ico',
-        ts: ts.toString()
-      }
-    ]
+  let message = {}
+
+  if (jobStatus.toLowerCase() === 'success') {
+    message = {
+      username: username ?? 'Github Action',
+      icon_url: iconUrl ?? 'https://octodex.github.com/images/original.png',
+      channel,
+      attachments: [
+        {
+          fallback: `[GitHub]: [${repositoryName}] ${workflow} ${eventName} ${action ? `${action} ` : ''}${jobStatus}`,
+          color: jobColor(jobStatus),
+          mrkdwn_in: ['text' as const],
+          text: successText,
+          fields,
+          footer: `<${repositoryUrl}|${repositoryName}> #${runNumber}`,
+          footer_icon: 'https://github.githubassets.com/favicon.ico',
+          ts: ts.toString()
+        }
+      ]
+    }
+  } else if (jobStatus.toLowerCase() === 'failure') {
+    message = {
+      username: username ?? 'Github Action',
+      icon_url: iconUrl ?? 'https://octodex.github.com/images/original.png',
+      channel,
+      attachments: [
+        {
+          fallback: `[GitHub]: [${repositoryName}] ${workflow} ${eventName} ${action ? `${action} ` : ''}${jobStatus}`,
+          color: jobColor(jobStatus),
+          mrkdwn_in: ['text' as const],
+          text: failureText,
+          fields,
+          footer: `<${repositoryUrl}|${repositoryName}> #${runNumber}`,
+          footer_icon: 'https://github.githubassets.com/favicon.ico',
+          ts: ts.toString()
+        }
+      ]
+    }
+  } else {
+    message = {
+      username: username ?? 'Github Action',
+      icon_url: iconUrl ?? 'https://octodex.github.com/images/original.png',
+      channel,
+      attachments: [
+        {
+          fallback: `[GitHub]: [${repositoryName}] ${workflow} ${eventName} ${action ? `${action} ` : ''}${jobStatus}`,
+          color: jobColor(jobStatus),
+          mrkdwn_in: ['text' as const],
+          text,
+          fields,
+          footer: `<${repositoryUrl}|${repositoryName}> #${runNumber}`,
+          footer_icon: 'https://github.githubassets.com/favicon.ico',
+          ts: ts.toString()
+        }
+      ]
+    }
   }
   core.debug(JSON.stringify(message, null, 2))
 
