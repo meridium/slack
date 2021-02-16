@@ -22,7 +22,14 @@ async function send(
   jobName: string,
   jobStatus: string,
   jobSteps: object,
-  channel?: string
+  metaData?: {
+    octopusChannel: string
+    octopusEnv: string
+    startedBy: string
+  },
+  channel?: string,
+  username?: string,
+  iconUrl?: string
 ): Promise<IncomingWebhookResult> {
   const eventName = process.env.GITHUB_EVENT_NAME
   const workflow = process.env.GITHUB_WORKFLOW
@@ -108,10 +115,10 @@ async function send(
   }
 
   const text = `${
-    `*<${workflowUrl}|Workflow _${workflow}_ ` +
-    `job _${jobName}_ triggered by _${eventName}_ is _${jobStatus}_>* ` +
-    `for <${refUrl}|\`${ref}\`>\n`
-  }${title ? `<${diffUrl}|\`${diffRef}\`> - ${title}` : ''}`
+    `I have started a new build of <${refUrl}|\`${ref}\`> ` +
+    `job triggered by <@${metaData?.startedBy}>\n` +
+    `This build will be deployed to ${metaData?.octopusEnv}\n`
+  }`
 
   // add job steps, if provided
   const checks: string[] = []
@@ -128,16 +135,13 @@ async function send(
   }
 
   const message = {
-    username: 'GitHub Action',
-    icon_url: 'https://octodex.github.com/images/original.png',
+    username: username ?? 'Github Action',
+    icon_url: iconUrl ?? 'https://octodex.github.com/images/original.png',
     channel,
     attachments: [
       {
         fallback: `[GitHub]: [${repositoryName}] ${workflow} ${eventName} ${action ? `${action} ` : ''}${jobStatus}`,
         color: jobColor(jobStatus),
-        author_name: sender?.login,
-        author_link: sender?.html_url,
-        author_icon: sender?.avatar_url,
         mrkdwn_in: ['text' as const],
         text,
         fields,

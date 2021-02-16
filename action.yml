@@ -11,6 +11,21 @@ inputs:
   channel:
     description: Override default channel with different channel or username
     required: false
+  username:
+    description: Override default username for bot
+    required: false
+  iconUrl:
+    description: Override default icon
+    required: false
+  octopusChannel:
+    description: Octopus channel
+    required: false
+  octopusEnv:
+    description: Octopus environment
+    required: false
+  startedBy:
+    description: Slack user who started the action
+    required: false
 runs:
   using: 'node12'
   main: 'dist/index.js'
