@@ -7011,7 +7011,7 @@ function send(url, jobName, jobStatus, jobSteps, metaData, channel, username, ic
                             fallback: `[GitHub]: [${repositoryName}] ${workflow} ${eventName} ${action ? `${action} ` : ''}${jobStatus}`,
                             color: jobColor(jobStatus),
                             mrkdwn_in: ['text'],
-                            text: `Job ${runNumber} has been cancelled by ${username}. It was triggered by <@${metaData === null || metaData === void 0 ? void 0 : metaData.startedBy}>`,
+                            text: `Job ${runNumber} has been cancelled. It was triggered by <@${metaData === null || metaData === void 0 ? void 0 : metaData.startedBy}> might wanna check it out.`,
                             fields,
                             footer: `<${repositoryUrl}|${repositoryName}> #${runNumber}`,
                             footer_icon: 'https://github.githubassets.com/favicon.ico',

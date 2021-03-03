@@ -280,7 +280,7 @@ async function send(
             }${jobStatus}`,
             color: jobColor(jobStatus),
             mrkdwn_in: ['text' as const],
-            text: `Job ${runNumber} has been cancelled by ${username}. It was triggered by <@${metaData?.startedBy}>`,
+            text: `Job ${runNumber} has been cancelled. It was triggered by <@${metaData?.startedBy}> might wanna check it out.`,
             fields,
             footer: `<${repositoryUrl}|${repositoryName}> #${runNumber}`,
             footer_icon: 'https://github.githubassets.com/favicon.ico',
