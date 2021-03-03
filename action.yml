@@ -26,6 +26,9 @@ inputs:
   startedBy:
     description: Slack user who started the action
     required: false
+  customMessage:
+    description: Add a custom message (this overrides all other text input fields)
+    required: false
 runs:
   using: 'node12'
   main: 'dist/index.js'

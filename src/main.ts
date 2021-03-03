@@ -22,9 +22,20 @@ async function run(): Promise<void> {
     const octopusChannel = core.getInput('octopusChannel', {required: false})
     const octopusEnv = core.getInput('octopusEnv', {required: false})
     const startedBy = core.getInput('startedBy', {required: false})
+    const customMessage = core.getInput('customMessage', {required: false})
 
     if (url) {
-      await send(url, jobName, jobStatus, jobSteps, {octopusChannel, octopusEnv, startedBy}, channel, username, iconUrl)
+      await send(
+        url,
+        jobName,
+        jobStatus,
+        jobSteps,
+        {octopusChannel, octopusEnv, startedBy},
+        channel,
+        username,
+        iconUrl,
+        customMessage
+      )
       core.debug('Sent to Slack.')
     } else {
       core.info('No "SLACK_WEBHOOK_URL" secret configured. Skip.')

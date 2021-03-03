@@ -29,7 +29,8 @@ async function send(
   },
   channel?: string,
   username?: string,
-  iconUrl?: string
+  iconUrl?: string,
+  customMessage?: string
 ): Promise<IncomingWebhookResult> {
   const eventName = process.env.GITHUB_EVENT_NAME
   const workflow = process.env.GITHUB_WORKFLOW
@@ -140,59 +141,129 @@ async function send(
 
   let message = {}
 
-  if (jobStatus.toLowerCase() === 'success') {
-    message = {
-      username: username ?? 'Github Action',
-      icon_url: iconUrl ?? 'https://octodex.github.com/images/original.png',
-      channel,
-      attachments: [
-        {
-          fallback: `[GitHub]: [${repositoryName}] ${workflow} ${eventName} ${action ? `${action} ` : ''}${jobStatus}`,
-          color: jobColor(jobStatus),
-          mrkdwn_in: ['text' as const],
-          text: successText,
-          fields,
-          footer: `<${repositoryUrl}|${repositoryName}> #${runNumber}`,
-          footer_icon: 'https://github.githubassets.com/favicon.ico',
-          ts: ts.toString()
-        }
-      ]
-    }
-  } else if (jobStatus.toLowerCase() === 'failure') {
-    message = {
-      username: username ?? 'Github Action',
-      icon_url: iconUrl ?? 'https://octodex.github.com/images/original.png',
-      channel,
-      attachments: [
-        {
-          fallback: `[GitHub]: [${repositoryName}] ${workflow} ${eventName} ${action ? `${action} ` : ''}${jobStatus}`,
-          color: jobColor(jobStatus),
-          mrkdwn_in: ['text' as const],
-          text: failureText,
-          fields,
-          footer: `<${repositoryUrl}|${repositoryName}> #${runNumber}`,
-          footer_icon: 'https://github.githubassets.com/favicon.ico',
-          ts: ts.toString()
-        }
-      ]
+  if (customMessage) {
+    if (jobStatus.toLowerCase() === 'success') {
+      message = {
+        username: username ?? 'Github Action',
+        icon_url: iconUrl ?? 'https://octodex.github.com/images/original.png',
+        channel,
+        attachments: [
+          {
+            fallback: `[GitHub]: [${repositoryName}] ${workflow} ${eventName} ${
+              action ? `${action} ` : ''
+            }${jobStatus}`,
+            color: jobColor(jobStatus),
+            mrkdwn_in: ['text' as const],
+            text: customMessage,
+            fields,
+            footer: `<${repositoryUrl}|${repositoryName}> #${runNumber}`,
+            footer_icon: 'https://github.githubassets.com/favicon.ico',
+            ts: ts.toString()
+          }
+        ]
+      }
+    } else if (jobStatus.toLowerCase() === 'failure') {
+      message = {
+        username: username ?? 'Github Action',
+        icon_url: iconUrl ?? 'https://octodex.github.com/images/original.png',
+        channel,
+        attachments: [
+          {
+            fallback: `[GitHub]: [${repositoryName}] ${workflow} ${eventName} ${
+              action ? `${action} ` : ''
+            }${jobStatus}`,
+            color: jobColor(jobStatus),
+            mrkdwn_in: ['text' as const],
+            text: customMessage,
+            fields,
+            footer: `<${repositoryUrl}|${repositoryName}> #${runNumber}`,
+            footer_icon: 'https://github.githubassets.com/favicon.ico',
+            ts: ts.toString()
+          }
+        ]
+      }
+    } else {
+      message = {
+        username: username ?? 'Github Action',
+        icon_url: iconUrl ?? 'https://octodex.github.com/images/original.png',
+        channel,
+        attachments: [
+          {
+            fallback: `[GitHub]: [${repositoryName}] ${workflow} ${eventName} ${
+              action ? `${action} ` : ''
+            }${jobStatus}`,
+            color: jobColor(jobStatus),
+            mrkdwn_in: ['text' as const],
+            text: customMessage,
+            fields,
+            footer: `<${repositoryUrl}|${repositoryName}> #${runNumber}`,
+            footer_icon: 'https://github.githubassets.com/favicon.ico',
+            ts: ts.toString()
+          }
+        ]
+      }
     }
   } else {
-    message = {
-      username: username ?? 'Github Action',
-      icon_url: iconUrl ?? 'https://octodex.github.com/images/original.png',
-      channel,
-      attachments: [
-        {
-          fallback: `[GitHub]: [${repositoryName}] ${workflow} ${eventName} ${action ? `${action} ` : ''}${jobStatus}`,
-          color: jobColor(jobStatus),
-          mrkdwn_in: ['text' as const],
-          text,
-          fields,
-          footer: `<${repositoryUrl}|${repositoryName}> #${runNumber}`,
-          footer_icon: 'https://github.githubassets.com/favicon.ico',
-          ts: ts.toString()
-        }
-      ]
+    if (jobStatus.toLowerCase() === 'success') {
+      message = {
+        username: username ?? 'Github Action',
+        icon_url: iconUrl ?? 'https://octodex.github.com/images/original.png',
+        channel,
+        attachments: [
+          {
+            fallback: `[GitHub]: [${repositoryName}] ${workflow} ${eventName} ${
+              action ? `${action} ` : ''
+            }${jobStatus}`,
+            color: jobColor(jobStatus),
+            mrkdwn_in: ['text' as const],
+            text: successText,
+            fields,
+            footer: `<${repositoryUrl}|${repositoryName}> #${runNumber}`,
+            footer_icon: 'https://github.githubassets.com/favicon.ico',
+            ts: ts.toString()
+          }
+        ]
+      }
+    } else if (jobStatus.toLowerCase() === 'failure') {
+      message = {
+        username: username ?? 'Github Action',
+        icon_url: iconUrl ?? 'https://octodex.github.com/images/original.png',
+        channel,
+        attachments: [
+          {
+            fallback: `[GitHub]: [${repositoryName}] ${workflow} ${eventName} ${
+              action ? `${action} ` : ''
+            }${jobStatus}`,
+            color: jobColor(jobStatus),
+            mrkdwn_in: ['text' as const],
+            text: failureText,
+            fields,
+            footer: `<${repositoryUrl}|${repositoryName}> #${runNumber}`,
+            footer_icon: 'https://github.githubassets.com/favicon.ico',
+            ts: ts.toString()
+          }
+        ]
+      }
+    } else {
+      message = {
+        username: username ?? 'Github Action',
+        icon_url: iconUrl ?? 'https://octodex.github.com/images/original.png',
+        channel,
+        attachments: [
+          {
+            fallback: `[GitHub]: [${repositoryName}] ${workflow} ${eventName} ${
+              action ? `${action} ` : ''
+            }${jobStatus}`,
+            color: jobColor(jobStatus),
+            mrkdwn_in: ['text' as const],
+            text,
+            fields,
+            footer: `<${repositoryUrl}|${repositoryName}> #${runNumber}`,
+            footer_icon: 'https://github.githubassets.com/favicon.ico',
+            ts: ts.toString()
+          }
+        ]
+      }
     }
   }
   core.debug(JSON.stringify(message, null, 2))
