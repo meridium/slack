@@ -186,6 +186,26 @@ async function send(
           }
         ]
       }
+    } else if (jobStatus.toLowerCase() === 'cancelled') {
+      message = {
+        username: username ?? 'Github Action',
+        icon_url: iconUrl ?? 'https://octodex.github.com/images/original.png',
+        channel,
+        attachments: [
+          {
+            fallback: `[GitHub]: [${repositoryName}] ${workflow} ${eventName} ${
+              action ? `${action} ` : ''
+            }${jobStatus}`,
+            color: jobColor(jobStatus),
+            mrkdwn_in: ['text' as const],
+            text: `Job ${runNumber} has been cancelled by ${username}. It was triggered by <@${metaData?.startedBy}>`,
+            fields,
+            footer: `<${repositoryUrl}|${repositoryName}> #${runNumber}`,
+            footer_icon: 'https://github.githubassets.com/favicon.ico',
+            ts: ts.toString()
+          }
+        ]
+      }
     } else {
       message = {
         username: username ?? 'Github Action',
@@ -241,6 +261,26 @@ async function send(
             color: jobColor(jobStatus),
             mrkdwn_in: ['text' as const],
             text: failureText,
+            fields,
+            footer: `<${repositoryUrl}|${repositoryName}> #${runNumber}`,
+            footer_icon: 'https://github.githubassets.com/favicon.ico',
+            ts: ts.toString()
+          }
+        ]
+      }
+    } else if (jobStatus.toLowerCase() === 'cancelled') {
+      message = {
+        username: username ?? 'Github Action',
+        icon_url: iconUrl ?? 'https://octodex.github.com/images/original.png',
+        channel,
+        attachments: [
+          {
+            fallback: `[GitHub]: [${repositoryName}] ${workflow} ${eventName} ${
+              action ? `${action} ` : ''
+            }${jobStatus}`,
+            color: jobColor(jobStatus),
+            mrkdwn_in: ['text' as const],
+            text: `Job ${runNumber} has been cancelled by ${username}. It was triggered by <@${metaData?.startedBy}>`,
             fields,
             footer: `<${repositoryUrl}|${repositoryName}> #${runNumber}`,
             footer_icon: 'https://github.githubassets.com/favicon.ico',

@@ -6923,6 +6923,25 @@ function send(url, jobName, jobStatus, jobSteps, metaData, channel, username, ic
                     ]
                 };
             }
+            else if (jobStatus.toLowerCase() === 'cancelled') {
+                message = {
+                    username: username !== null && username !== void 0 ? username : 'Github Action',
+                    icon_url: iconUrl !== null && iconUrl !== void 0 ? iconUrl : 'https://octodex.github.com/images/original.png',
+                    channel,
+                    attachments: [
+                        {
+                            fallback: `[GitHub]: [${repositoryName}] ${workflow} ${eventName} ${action ? `${action} ` : ''}${jobStatus}`,
+                            color: jobColor(jobStatus),
+                            mrkdwn_in: ['text'],
+                            text: `Job ${runNumber} has been cancelled by ${username}. It was triggered by <@${metaData === null || metaData === void 0 ? void 0 : metaData.startedBy}>`,
+                            fields,
+                            footer: `<${repositoryUrl}|${repositoryName}> #${runNumber}`,
+                            footer_icon: 'https://github.githubassets.com/favicon.ico',
+                            ts: ts.toString()
+                        }
+                    ]
+                };
+            }
             else {
                 message = {
                     username: username !== null && username !== void 0 ? username : 'Github Action',
@@ -6974,6 +6993,25 @@ function send(url, jobName, jobStatus, jobSteps, metaData, channel, username, ic
                             color: jobColor(jobStatus),
                             mrkdwn_in: ['text'],
                             text: failureText,
+                            fields,
+                            footer: `<${repositoryUrl}|${repositoryName}> #${runNumber}`,
+                            footer_icon: 'https://github.githubassets.com/favicon.ico',
+                            ts: ts.toString()
+                        }
+                    ]
+                };
+            }
+            else if (jobStatus.toLowerCase() === 'cancelled') {
+                message = {
+                    username: username !== null && username !== void 0 ? username : 'Github Action',
+                    icon_url: iconUrl !== null && iconUrl !== void 0 ? iconUrl : 'https://octodex.github.com/images/original.png',
+                    channel,
+                    attachments: [
+                        {
+                            fallback: `[GitHub]: [${repositoryName}] ${workflow} ${eventName} ${action ? `${action} ` : ''}${jobStatus}`,
+                            color: jobColor(jobStatus),
+                            mrkdwn_in: ['text'],
+                            text: `Job ${runNumber} has been cancelled by ${username}. It was triggered by <@${metaData === null || metaData === void 0 ? void 0 : metaData.startedBy}>`,
                             fields,
                             footer: `<${repositoryUrl}|${repositoryName}> #${runNumber}`,
                             footer_icon: 'https://github.githubassets.com/favicon.ico',
