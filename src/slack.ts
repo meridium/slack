@@ -118,7 +118,11 @@ async function send(
   const text = `${
     `I have started a new build of <${refUrl}|\`${ref}\`> ` +
     `job triggered by <@${metaData?.startedBy}>\n` +
-    `This build will be deployed to ${metaData?.octopusEnv}\n`
+    `${
+      metaData?.octopusEnv && metaData?.octopusEnv.length > 0
+        ? `This build will be deployed to ${metaData?.octopusEnv}`
+        : `This build will not be autodeployed`
+    }\n`
   }`
 
   const successText = `${`Deployment to ${metaData?.octopusEnv} was a ${jobStatus}\n`}`

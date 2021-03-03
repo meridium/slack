@@ -6865,7 +6865,9 @@ function send(url, jobName, jobStatus, jobSteps, metaData, channel, username, ic
         }
         const text = `${`I have started a new build of <${refUrl}|\`${ref}\`> ` +
             `job triggered by <@${metaData === null || metaData === void 0 ? void 0 : metaData.startedBy}>\n` +
-            `This build will be deployed to ${metaData === null || metaData === void 0 ? void 0 : metaData.octopusEnv}\n`}`;
+            `${(metaData === null || metaData === void 0 ? void 0 : metaData.octopusEnv) && (metaData === null || metaData === void 0 ? void 0 : metaData.octopusEnv.length) > 0
+                ? `This build will be deployed to ${metaData === null || metaData === void 0 ? void 0 : metaData.octopusEnv}`
+                : `This build will not be autodeployed`}\n`}`;
         const successText = `${`Deployment to ${metaData === null || metaData === void 0 ? void 0 : metaData.octopusEnv} was a ${jobStatus}\n`}`;
         const failureText = `${`Deployment to ${metaData === null || metaData === void 0 ? void 0 : metaData.octopusEnv} was a ${jobStatus}\n <${workflowUrl}|Check error logs>`}`;
         // add job steps, if provided
