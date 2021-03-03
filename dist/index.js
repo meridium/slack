@@ -6870,6 +6870,7 @@ function send(url, jobName, jobStatus, jobSteps, metaData, channel, username, ic
                 : `This build will not be autodeployed`}\n`}`;
         const successText = `${`Deployment to ${metaData === null || metaData === void 0 ? void 0 : metaData.octopusEnv} was a ${jobStatus}\n`}`;
         const failureText = `${`Deployment to ${metaData === null || metaData === void 0 ? void 0 : metaData.octopusEnv} was a ${jobStatus}\n <${workflowUrl}|Check error logs>`}`;
+        const failureNoDeployText = `${`Build triggered by <@${metaData === null || metaData === void 0 ? void 0 : metaData.startedBy}> was a ${jobStatus}\n <${workflowUrl}|Check error logs>`}`;
         // add job steps, if provided
         const checks = [];
         for (const [step, status] of Object.entries(jobSteps)) {
@@ -6914,7 +6915,7 @@ function send(url, jobName, jobStatus, jobSteps, metaData, channel, username, ic
                             fallback: `[GitHub]: [${repositoryName}] ${workflow} ${eventName} ${action ? `${action} ` : ''}${jobStatus}`,
                             color: jobColor(jobStatus),
                             mrkdwn_in: ['text'],
-                            text: customMessage,
+                            text: `${failureNoDeployText}\n${customMessage}`,
                             fields,
                             footer: `<${repositoryUrl}|${repositoryName}> #${runNumber}`,
                             footer_icon: 'https://github.githubassets.com/favicon.ico',
