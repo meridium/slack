@@ -128,6 +128,7 @@ async function send(
   const successText = `${`Deployment to ${metaData?.octopusEnv} was a ${jobStatus}\n`}`
 
   const failureText = `${`Deployment to ${metaData?.octopusEnv} was a ${jobStatus}\n <${workflowUrl}|Check error logs>`}`
+  const failureNoDeployText = `${`Build triggered by <@${metaData?.startedBy}> was a ${jobStatus}\n <${workflowUrl}|Check error logs>`}`
 
   // add job steps, if provided
   const checks: string[] = []
@@ -178,7 +179,7 @@ async function send(
             }${jobStatus}`,
             color: jobColor(jobStatus),
             mrkdwn_in: ['text' as const],
-            text: customMessage,
+            text: `${failureNoDeployText}\n${customMessage}`,
             fields,
             footer: `<${repositoryUrl}|${repositoryName}> #${runNumber}`,
             footer_icon: 'https://github.githubassets.com/favicon.ico',
